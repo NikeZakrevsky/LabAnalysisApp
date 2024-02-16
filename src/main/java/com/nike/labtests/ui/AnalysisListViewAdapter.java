@@ -43,4 +43,12 @@ public class AnalysisListViewAdapter extends ArrayAdapter<Analysis> {
         textViewDescription.setText(analysis.getDescription());
         return currentItemView;
     }
+
+    public void setData(List<Analysis> newData) {
+        dataSet.clear();
+        if (newData != null) {
+            dataSet.addAll(newData);
+        }
+        notifyDataSetChanged();
+    }
 }

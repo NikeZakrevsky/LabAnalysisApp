@@ -1,19 +1,29 @@
 package com.nike.labtests.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
+@Entity(tableName = "analysis_results")
 public class Analysis implements Serializable {
+	@PrimaryKey(autoGenerate = true)
+	private int id;
+
+	@ColumnInfo(name = "title")
 	private String title;
+
+	@ColumnInfo(name = "description")
 	private String description;
-	private Map<Date, Float> values;
 
 	public Analysis(String title, String description) {
 		this.title = title;
 		this.description = description;
-		this.values = new HashMap<>();
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getTitle() {
@@ -24,7 +34,15 @@ public class Analysis implements Serializable {
 		return description;
 	}
 
-	public Map<Date, Float> getValue() {
-		return values;
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

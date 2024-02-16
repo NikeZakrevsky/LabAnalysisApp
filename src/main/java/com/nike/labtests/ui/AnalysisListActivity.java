@@ -9,7 +9,7 @@ import com.nike.labtests.model.Analysis;
 import com.nike.labtests.service.AnalysisService;
 import com.nike.labtests.service.AnalysisServiceImpl;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class AnalysisListActivity extends BaseActivity {
 
@@ -19,15 +19,16 @@ public class AnalysisListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis_list);
-
-        List<Analysis> result = analysisService.getData();
-
         ListView analysisListView = findViewById(R.id.analysis_list);
-        AnalysisListViewAdapter analysisListViewAdapter = new AnalysisListViewAdapter(result, this);
 
+        AnalysisListViewAdapter analysisListViewAdapter =
+                new AnalysisListViewAdapter(new ArrayList<>(), this);
         analysisListView.setAdapter(analysisListViewAdapter);
+
+        analysisService.getData().observe(this, analysisListViewAdapter::setData);
+
         analysisListView.setOnItemClickListener((adapterView, view, position, id) -> {
-            Analysis analysis = result.get(position);
+            Analysis analysis = analysisListViewAdapter.getItem(position);
             Intent intent = new Intent(AnalysisListActivity.this, AnalysisActivity.class);
             intent.putExtra("data", analysis);
             startActivity(intent);
