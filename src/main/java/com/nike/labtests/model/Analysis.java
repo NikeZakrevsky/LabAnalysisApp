@@ -1,16 +1,19 @@
 package com.nike.labtests.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Analysis implements Serializable {
 	private String title;
 	private String description;
-	private float value;
+	private Map<Date, Float> values;
 
-	public Analysis(String title, String description, float value) {
+	public Analysis(String title, String description) {
 		this.title = title;
 		this.description = description;
-		this.value = value;
+		this.values = new HashMap<>();
 	}
 
 	public String getTitle() {
@@ -21,7 +24,7 @@ public class Analysis implements Serializable {
 		return description;
 	}
 
-	public float getValue() {
-		return value;
+	public Map<Date, Float> getValue() {
+		return values;
 	}
 }

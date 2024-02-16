@@ -16,20 +16,26 @@ public class AnalysisResultsRepository extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "analysis.db";
     public static final String TABLE_NAME = "analysis_results";
 
+    public static final String ID = "id";
+    public static final String TITLE = "title";
+    public static final String DESCRIPTION = "description";
+
+    public static final String CREATE_TABLE_QUERY = "create table " + TABLE_NAME +
+            " (" + ID + " integer primary key, " + TITLE + " text, " + DESCRIPTION + " text)";
+    public static final String DROP_TABLE_QUERY = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
     public AnalysisResultsRepository(Context context) {
         super(context, DATABASE_NAME , null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(
-                "create table " + TABLE_NAME + " (id integer primary key, title text, description text)"
-        );
+        database.execSQL(CREATE_TABLE_QUERY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int i, int i1) {
-        database.execSQL("DROP TABLE IF EXISTS analysis_results");
+        database.execSQL(DROP_TABLE_QUERY);
         onCreate(database);
     }
 
@@ -37,8 +43,8 @@ public class AnalysisResultsRepository extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("title", analysis.getTitle());
-        values.put("description", analysis.getDescription());
+        values.put(TITLE, analysis.getTitle());
+        values.put(DESCRIPTION, analysis.getDescription());
 
         database.insert(TABLE_NAME, null, values);
         return true;
@@ -51,7 +57,7 @@ public class AnalysisResultsRepository extends SQLiteOpenHelper {
         List<Analysis> analysisList = new ArrayList<>();
         if (cursorAnalysis.moveToFirst()) {
             do {
-                Analysis analysis = new Analysis(cursorAnalysis.getString(1), cursorAnalysis.getString(2), 1.0f);
+                Analysis analysis = new Analysis(cursorAnalysis.getString(1), cursorAnalysis.getString(2));
                 analysisList.add(analysis);
             } while (cursorAnalysis.moveToNext());
         }

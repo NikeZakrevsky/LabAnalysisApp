@@ -3,12 +3,10 @@ package com.nike.labtests.ui;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.nike.labtests.R;
 import com.nike.labtests.model.Analysis;
 
-public class AnalysisActivity extends AppCompatActivity {
+public class AnalysisActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

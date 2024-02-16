@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.nike.labtests.R;
 import com.nike.labtests.model.Analysis;
 import com.nike.labtests.service.AnalysisService;
@@ -13,7 +11,7 @@ import com.nike.labtests.service.AnalysisServiceImpl;
 
 import java.util.List;
 
-public class AnalysisListActivity extends AppCompatActivity {
+public class AnalysisListActivity extends BaseActivity {
 
     private AnalysisService analysisService = new AnalysisServiceImpl();
 
@@ -34,5 +32,9 @@ public class AnalysisListActivity extends AppCompatActivity {
             intent.putExtra("data", analysis);
             startActivity(intent);
         });
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 }
