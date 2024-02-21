@@ -5,25 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nike.labtests.R;
-import com.nike.labtests.model.Analysis;
+import com.nike.labtests.dto.AnalysisDto;
+import com.nike.labtests.dto.ResultDto;
 
 import java.util.List;
 
-public class AnalysisListViewAdapter extends ArrayAdapter<Analysis> {
+public class AnalysisListViewAdapter extends ArrayAdapter<AnalysisDto> {
 
-    private Activity context;
-    private List<Analysis> dataSet;
+    private List<AnalysisDto> dataSet;
 
-    public AnalysisListViewAdapter(final List<Analysis> data, final Activity context) {
+    public AnalysisListViewAdapter(final List<AnalysisDto> data, final Activity context) {
         super(context, R.layout.analysis_row, data);
         this.dataSet = data;
-        this.context = context;
     }
 
     @NonNull
@@ -36,15 +36,35 @@ public class AnalysisListViewAdapter extends ArrayAdapter<Analysis> {
         }
 
         TextView textViewName = currentItemView.findViewById(R.id.analysis_name);
+        TextView textViewValue= currentItemView.findViewById(R.id.analysis_value);
         TextView textViewDescription = currentItemView.findViewById(R.id.analysis_description);
+        ImageView analysisIcon = currentItemView.findViewById(R.id.analysis_icon);
 
-        Analysis analysis = dataSet.get(position);
-        textViewName.setText(analysis.getTitle());
+        AnalysisDto analysis = dataSet.get(position);
+        textViewName.setText(analysis.getName());
         textViewDescription.setText(analysis.getDescription());
+        List<ResultDto> results = analysis.getResults();
+        ResultDto lastResultDto = results.get(results.size() - 1);
+        if (results.size() > 0) {
+            textViewValue.setText(lastResultDto.getValue() + " " + analysis.getUnits());
+        }
+
+        switch (lastResultDto.getLevel()) {
+            case LOW:
+                analysisIcon.setImageResource(R.drawable.arrow_downward);
+                break;
+            case HIGH:
+                analysisIcon.setImageResource(R.drawable.arrow_upward);
+                break;
+            case NORMAL:
+                analysisIcon.setImageResource(R.drawable.checkmark);
+                break;
+        }
+
         return currentItemView;
     }
 
-    public void setData(List<Analysis> newData) {
+    public void setData(List<AnalysisDto> newData) {
         dataSet.clear();
         if (newData != null) {
             dataSet.addAll(newData);

@@ -18,7 +18,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.nike.labtests.model.Analysis;
+import com.nike.labtests.model.AnalysisResult;
 import com.nike.labtests.service.AnalysisService;
 import com.nike.labtests.service.AnalysisServiceImpl;
 import com.nike.labtests.service.DriveServiceHelper;
@@ -26,9 +26,7 @@ import com.opencsv.CSVReader;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class GoogleSignInActivity extends AppCompatActivity {
 
@@ -78,7 +76,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
                     // The DriveServiceHelper encapsulates all REST API and SAF functionality.
                     // Its instantiation is required before handling any onClick actions.
                     mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
-                    readFile("1xflyEo8FR2Hg4k_Q6pMzjvMUBlirgHQ2");
+                    readFile("1QwSqKabd2D6i39AAstTs0gg0wFKXXAYA");
 
 
                 })
@@ -99,11 +97,16 @@ public class GoogleSignInActivity extends AppCompatActivity {
                         CSVReader data = new CSVReader(new StringReader(content));
                         try {
                             String[] header = data.readNext();
-                            List<Analysis> result = new ArrayList<>();
                             for (String[] datum : data) {
-                                result.add(new Analysis(datum[0], datum[0]));
+
+                                for (int i = 2; i < datum.length; i++) {
+                                    if (!datum[i].equals("")) {
+                                        Log.e("qwe", datum[0]);
+                                        AnalysisResult analysisResult = new AnalysisResult(Integer.parseInt(datum[0]), Float.parseFloat(datum[i]), header[i]);
+                                        analysisService.addResult(analysisResult);
+                                    }
+                                }
                             }
-                            analysisService.addAll(result);
 
                         } catch (IOException e) {
 

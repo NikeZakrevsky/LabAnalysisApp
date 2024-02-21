@@ -2,11 +2,18 @@ package com.nike.labtests.service;
 
 import androidx.lifecycle.LiveData;
 
-import com.nike.labtests.model.Analysis;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.nike.labtests.dto.Level;
+import com.nike.labtests.model.AnalysisResult;
+import com.nike.labtests.model.AnalysisResultWithInfo;
 
 import java.util.List;
 
 public interface AnalysisService {
-	LiveData<List<Analysis>> getData();
-	void addAll(List<Analysis> analysisList);
+
+	ListenableFuture<Long> addResult(final AnalysisResult analysisResult);
+
+	LiveData<List<AnalysisResultWithInfo>> getAnalysisWithResults();
+
+    Level getLevel(AnalysisResultWithInfo resultWithInfo);
 }

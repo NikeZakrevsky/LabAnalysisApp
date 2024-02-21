@@ -4,24 +4,30 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.nike.labtests.model.Analysis;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.nike.labtests.model.AnalysisResult;
+import com.nike.labtests.model.AnalysisResultWithInfo;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class AnalysisResultsRepository {
-
-    private AnalysisDao analysisDao;
+    private AnalysisResultsDao analysisResultsDao;
+    private final ListeningExecutorService executorService;
 
     public AnalysisResultsRepository(Context context) {
         AppDatabase db = AppDatabase.getInstance(context);
-        analysisDao = db.analysisDao();
+        analysisResultsDao = db.analysisWithResultsDao();
+        executorService = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
     }
 
-    public void insertAnalysis(final Analysis analysis) {
-        new Thread(() -> analysisDao.insert(analysis)).start();
+    public ListenableFuture<Long> insertAnalysis(final AnalysisResult analysisResult) {
+        return executorService.submit(() -> analysisResultsDao.insert(analysisResult));
     }
 
-    public LiveData<List<Analysis>> getAll() {
-        return analysisDao.getAll();
+    public LiveData<List<AnalysisResultWithInfo>> getAll() {
+        return analysisResultsDao.getAnalysisResultsWithInfo();
     }
 }
